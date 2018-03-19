@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+// What's the name of the app (and the phar and binary file?)
+$appname="demo";
+
+$basedir = getcwd();
+
+// Source code in src
+$srcRoot = "$basedir/src";
+
+// Build stuff in build
+$buildRoot = "$basedir/build";
+
+$target = "$buildRoot/$appname.phar";
+$bintarget = "$buildRoot/$appname";
+
+$flags = FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::KEY_AS_FILENAME;
+
+// Clean up old build stuff if it exists
+if (file_exists($target)) {
+	unlink($target);
+}
+if (file_exists($bintarget)) {
+	unlink($bintarget);
+}
+
+$phar = new Phar($target, $flags, "$appname.phar");
+
+// Wrap up all that's in src
+$phar->buildFromIterator(
+  new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator($srcRoot, FilesystemIterator::SKIP_DOTS)),
+    $srcRoot);
+
+// Dummy stub file … NEEDED!
+$phar->setStub(file_get_contents("$srcRoot/stub.php"));
+
+// Copy phar to binary
+copy($target, $bintarget);
+
+// Set executable
+chmod($bintarget, 0755);
