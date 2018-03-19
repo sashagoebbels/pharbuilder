@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Use this tool to bundle a PHP app as a phar file.
+Use this tool to bundle a PHP app as a phar file. This originally was built for a command line app so if you want to build a web archive, remove the $argc and $argv stuff from src/common.php.
 
 ## How to start
 

@@ -2,5 +2,5 @@
 <?php
 
 Phar::mapPhar();
-include 'phar://syshell.phar/index.php';
+include 'phar://APPNAME.phar/index.php';
 __HALT_COMPILER();
